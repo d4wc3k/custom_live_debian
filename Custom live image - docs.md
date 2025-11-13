@@ -1,54 +1,70 @@
-
 - ### Link to article: [Link](https://www.siberoloji.com/how-to-build-a-custom-debian-iso-image-on-debian-12-bookworm/)
-
-
+    
 - ### Install needed packages
-
-	```
-	sudo apt install live-build debootstrap squashfs-tools xorriso isolinux syslinux-utils wget
-	```
-	
+    
+    ```
+    sudo apt install live-build debootstrap squashfs-tools xorriso isolinux syslinux-utils wget
+    ```
+    
 - ### Create work directory
-
-	```
-	  mkdir ~/debian-custom-iso
-	  cd ~/debian-custom-iso
-	```
-
-
+    
+    ```
+      mkdir ~/debian-custom-iso
+      cd ~/debian-custom-iso
+    ```
+    
 - ### Configure build
+    
+    ```
+		lb config \
+		--apt-source-archives false \
+		--bootappend-live "boot=live components username=granmasterzondra2nd" \
+		--backports true \
+		--distribution trixie \
+		--binary-images iso-hybrid \
+		--archive-areas "main contrib non-free non-free-firmware" \
+		--debian-installer none \
+		--hdd-label JANUSH_DEBIAN_LIVE \
+		--security true \
+		--updates true \
+		--verbose
 
 	```
-	lb config \
-	  --distribution trixie \
-	  --binary-images iso-hybrid \
-	  --archive-areas "main contrib non-free non-free-firmware" \
-	  --debian-installer live
-	```
-	
-- ### Configure custom package
+    
+- ### Configure custom package lits
 
-	```
-	$EDITOR custom.list.chroot
-	cp custom.list.chroot config/package-lists/custom.list.chroot
-	```
+**Example:** 
+    
+```    
+		$EDITOR $FILE_NAME$.list.chroot
+	    cp $FILE_NAME$.list.chroot BUILD_DIR/config/package-lists/
+```
+
+
+- ### Add deb files
+
+```
+	cp XYZ_PATH/.deb BUILD_DIR/config/packages.chroot/
+```
 
 - ### Make other customizations
-
-
+    
+    [Debian Live Manual](https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html)
+    
 - ### Start building
-	
-	```
-	sudo lb build
-	```
-
+    
+    ```
+    sudo lb build
+    ```
+    
 - ### Create bootable USB
-	```
-	sudo dd if=live-image-amd64.hybrid.iso of=/dev/sdX bs=4M status=progress && sync
-	```  	
-	
+    
+    ```
+    sudo dd if=live-image-amd64.hybrid.iso of=/dev/sdX bs=4M status=progress && sync
+    ```
+    
 - ### Clean build (optional)
-
-	```
-	sudo lb clean
-	```
+    
+    ```
+    sudo lb clean
+    ```
